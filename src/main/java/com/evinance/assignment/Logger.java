@@ -1,5 +1,6 @@
 package com.evinance.assignment;
 
+import com.evinance.model.LoggingQueueDispatcher;
 
 public interface Logger {
 
@@ -13,4 +14,5 @@ public interface Logger {
      * Calls to this method are blocking until all messaged are logged.
      */
     void shutdown();
+    
 }
