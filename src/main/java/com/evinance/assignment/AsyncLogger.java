@@ -6,6 +6,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import com.evinance.model.LogMessage;
 import com.evinance.model.LoggingLevel;
 import com.evinance.model.LoggingQueueDispatcher;
+import com.evinance.model.QueueDispatcher;
 import com.evinance.model.ThreadAdapter;
 
 
@@ -15,12 +16,13 @@ public class AsyncLogger implements Logger {
 	private LinkedBlockingQueue<LogMessage> pendingMessages;
 	private String loggerFor;
     private ThreadAdapter threadAdapter;
-    private LoggingQueueDispatcher loggingQueueDispatcher;
+    private QueueDispatcher loggingQueueDispatcher;
 
-    public AsyncLogger(LinkedBlockingQueue<LogMessage> pendingMessages, String loggerFor, ThreadAdapter threadAdapter) {
+    public AsyncLogger(LinkedBlockingQueue<LogMessage> pendingMessages, String loggerFor, ThreadAdapter threadAdapter, QueueDispatcher loggingQueueDispatcher) {
         this.pendingMessages = pendingMessages;
         this.loggerFor = loggerFor;
         this.threadAdapter = threadAdapter;
+        this.loggingQueueDispatcher = loggingQueueDispatcher;
     }
     
     @Override
@@ -34,7 +36,7 @@ public class AsyncLogger implements Logger {
 
     @Override
     public void shutdown() {
-    		this.loggingQueueDispatcher.waitForCompletion();
+    		loggingQueueDispatcher.waitForCompletion();
     }
     
 }

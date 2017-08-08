@@ -11,21 +11,23 @@ import com.evinance.assignment.MessageProcessor;
 public class LoggerFactoryImpl implements LoggerFactory {
 	private LinkedBlockingQueue<LogMessage> pendingMessages;
     private ThreadAdapter threadAdapter;
+    private QueueDispatcher loggingQueueDispatcher;
   
     
     private ConcurrentHashMap<String, Logger> loggersCache = new ConcurrentHashMap<String, Logger>();
 
 
-    public LoggerFactoryImpl(LinkedBlockingQueue<LogMessage> pendingMessages, ThreadAdapter threadAdapter)
+    public LoggerFactoryImpl(LinkedBlockingQueue<LogMessage> pendingMessages, ThreadAdapter threadAdapter, QueueDispatcher loggingQueueDispatcher)
     {
         this.pendingMessages = pendingMessages;
         this.threadAdapter = threadAdapter;
+        this.loggingQueueDispatcher = loggingQueueDispatcher;
     }
 
     public Logger getLogger(String loggerFor)
     {
     		if(!loggersCache.contains(loggerFor)) {
-    			loggersCache.put(loggerFor, new AsyncLogger(pendingMessages, loggerFor, threadAdapter));
+    			loggersCache.put(loggerFor, new AsyncLogger(pendingMessages, loggerFor, threadAdapter, loggingQueueDispatcher));
     		}
     		return loggersCache.get(loggerFor);
     }

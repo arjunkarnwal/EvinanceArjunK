@@ -1,6 +1,5 @@
 package com.evinance.app;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -24,16 +23,9 @@ public class EvinanceApp {
 	public static void main(String[] args) {
 		LinkedBlockingQueue<LogMessage> pendingLogQueue = new LinkedBlockingQueue<LogMessage>();
 
-
 		ThreadAdapter threadAdapter = new ThreadAdapterImpl();
-		LoggerFactory loggerFactory = new LoggerFactoryImpl(pendingLogQueue, threadAdapter);
-
-
-       // var fileSystem = new FileSystem();
-       // var userRoamingPath = GetUserDataDirectory(fileSystem);
 
         Appender simpleTextFileLogger = new SimpleTextFileAppender("log.txt");
-        //simpleTextFileLogger.start();
         Appender consoleListener = new ConsoleAppender();
         ArrayList<Appender> listeners = new ArrayList<Appender>();
         listeners.add(simpleTextFileLogger);
@@ -41,15 +33,22 @@ public class EvinanceApp {
         
         MessageProcessor messageProcessor = new LogMessageProcessor();
 
-        QueueDispatcher loggingQueueDispatcher = new LoggingQueueDispatcher(pendingLogQueue, listeners, threadAdapter, loggerFactory.getLogger("MyLogger"),messageProcessor);
+        QueueDispatcher loggingQueueDispatcher = new LoggingQueueDispatcher(pendingLogQueue, listeners, threadAdapter, messageProcessor);
         loggingQueueDispatcher.start();
+		LoggerFactory loggerFactory = new LoggerFactoryImpl(pendingLogQueue, threadAdapter, loggingQueueDispatcher);
 
         Logger logger = loggerFactory.getLogger("MyLogger");
 
-        logger.log("you have entered: ",LoggingLevel.Info);
+        logger.log("you have entered: 1",LoggingLevel.Info);
+        logger.log("you have entered: 2",LoggingLevel.Info);
+        logger.log("you have entered: 3",LoggingLevel.Info);
+        logger.log("you have entered: 4",LoggingLevel.Info);
+        logger.log("you have entered: 5",LoggingLevel.Info);
+        logger.log("you have entered: 6",LoggingLevel.Info);
+        
         System.out.println("[Program] pending LogQueue will be stopped now...");
         
-        loggingQueueDispatcher.waitForCompletion();
+        logger.shutdown();
 	}
 
 }

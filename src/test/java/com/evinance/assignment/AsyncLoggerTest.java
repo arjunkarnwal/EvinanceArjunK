@@ -7,35 +7,52 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.evinance.model.LogMessage;
+import com.evinance.model.LoggingLevel;
+import com.evinance.model.QueueDispatcher;
+import com.evinance.model.ThreadAdapter;
+import com.evinance.model.ThreadAdapterImpl;
+
+import org.junit.Assert;
+
 import static org.mockito.Mockito.inOrder;
+
+import java.util.Date;
+import java.util.concurrent.LinkedBlockingQueue;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AsyncLoggerTest {
 
-    private AsyncLogger fixture;
-
+    private AsyncLogger logger;
+    private LinkedBlockingQueue<LogMessage> pendingMessages;
+    private String loggerFor;
+    private ThreadAdapter threadAdapter;
     @Mock
-    private Appender appender;
+    private QueueDispatcher loggingQueueDispatcher;
+
 
 
     @Before
     public void setUp() throws Exception {
-        fixture = new AsyncLogger(appender, new DelayingMessageProcessor());
+    		pendingMessages = new LinkedBlockingQueue<LogMessage>();
+    		loggerFor = "MyLogger";
+    		threadAdapter = new ThreadAdapterImpl();
+    		logger = new AsyncLogger(pendingMessages, loggerFor, threadAdapter, loggingQueueDispatcher);
     }
 
     @Test
-    public void log() throws Exception {
-        InOrder inOrder = inOrder(appender);
-
+    public void testLog() throws Exception {
         for (int i=0; i<100; i++) {
-            fixture.log("Test message {0}", i);
+        		logger.log("Test message " + i,LoggingLevel.Debug);
         }
-
-        fixture.shutdown();
-
-        for (int i=0; i<100; i++) {
-            inOrder.verify(appender).append("Test message " + i);
+        int i=0;
+        while(!pendingMessages.isEmpty()) {
+			LogMessage logMessage =  pendingMessages.remove();
+			Assert.assertEquals("Test message " + i, logMessage.getMessage());
+			i++;
         }
+        Assert.assertEquals(100, i);
+        
     }
 
 }
