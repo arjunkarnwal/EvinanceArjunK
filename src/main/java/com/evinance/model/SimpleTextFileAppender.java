@@ -10,6 +10,11 @@ import java.nio.file.FileSystem;
 
 import com.evinance.assignment.Appender;
 
+/**
+ * Appnder class to append to File
+ * @author arjunkarnwal
+ *
+ */
 public class SimpleTextFileAppender implements Appender{
 	private String logFileName;
 	private FileOutputStream fileStream;
@@ -24,7 +29,10 @@ public class SimpleTextFileAppender implements Appender{
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Close the file stream
+	 */
 	public void stop()
 	{
 		if (fileStream != null)

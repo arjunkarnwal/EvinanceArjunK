@@ -1,6 +1,5 @@
 package com.evinance.assignment;
 
-import com.evinance.model.LoggingQueueDispatcher;
 
 public interface Logger {
 

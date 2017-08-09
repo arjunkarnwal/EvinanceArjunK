@@ -1,19 +1,21 @@
 package com.evinance.model;
 
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.evinance.assignment.Appender;
-import com.evinance.assignment.Logger;
 import com.evinance.assignment.MessageProcessor;
 
+/**
+ * Implements the queue to process the log messages
+ * @author arjunkarnwal
+ *
+ */
 public class LoggingQueueDispatcher implements QueueDispatcher{
 	private LinkedBlockingQueue<LogMessage> pendingMessages;
 	private Iterable<Appender> listeners;
 	private ThreadAdapter threadAdapter;
-	private Thread dispatcherThread;
 	private final MessageProcessor messageProcessor;
-	private boolean breakLoop=false;
+	private ExecutorService executor =null;
 
 	public LoggingQueueDispatcher(LinkedBlockingQueue<LogMessage> pendingMessages, Iterable<Appender> listeners, ThreadAdapter threadAdapter, MessageProcessor messageProcessor)
 	{
@@ -23,18 +25,18 @@ public class LoggingQueueDispatcher implements QueueDispatcher{
 		this.messageProcessor = messageProcessor;
 	}
 
+	@Override
 	public void start()
 	{
 		//  Using interface  'threadAdapter.createBackgroundThread' to allow unit testing
-		Thread thread = threadAdapter.createBackGroundThread(this::messageLoop);
-		thread.start();
-		dispatcherThread = thread;
+		executor = threadAdapter.createBackGroundThread(this::messageLoop);
 	}
-
+	
+	@Override
 	public void waitForCompletion()
 	{
-		breakLoop = true;
-		synchronized(pendingMessages) {
+		executor.shutdownNow();
+	    synchronized(pendingMessages) {
 			while(!pendingMessages.isEmpty()) {
 				LogMessage logMessage =  pendingMessages.remove();
 				for(Appender appender : this.listeners) {
@@ -49,7 +51,7 @@ public class LoggingQueueDispatcher implements QueueDispatcher{
 		LogMessage logMessage =  null;
 		synchronized(pendingMessages) {
 			try {
-				while(!breakLoop && (logMessage = pendingMessages.take())!=null)
+				while((logMessage = pendingMessages.take())!=null)
 				{
 					// !!!!! Now it is safe to use append without ever using lock or forcing important threads to wait.
 					for(Appender appender : this.listeners) {
@@ -57,7 +59,6 @@ public class LoggingQueueDispatcher implements QueueDispatcher{
 					}
 				}
 			} catch (InterruptedException e) {
-				e.printStackTrace();
 			}
 		}
 	}

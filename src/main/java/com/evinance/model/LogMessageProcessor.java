@@ -4,6 +4,11 @@ import java.util.Date;
 
 import com.evinance.assignment.MessageProcessor;
 
+/**
+ * Class to process the log message
+ * @author arjunkarnwal
+ *
+ */
 public class LogMessageProcessor implements MessageProcessor {
 	
 	@Override

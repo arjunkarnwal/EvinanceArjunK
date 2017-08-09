@@ -37,6 +37,6 @@ public class AsyncLogger implements Logger {
     @Override
     public void shutdown() {
     		loggingQueueDispatcher.waitForCompletion();
-    }
+	}
     
 }

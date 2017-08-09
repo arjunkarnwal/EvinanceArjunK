@@ -8,12 +8,15 @@ import com.evinance.assignment.AsyncLogger;
 import com.evinance.assignment.Logger;
 import com.evinance.assignment.MessageProcessor;
 
+/**
+ * Factory class to create logger instance
+ * @author arjunkarnwal
+ *
+ */
 public class LoggerFactoryImpl implements LoggerFactory {
 	private LinkedBlockingQueue<LogMessage> pendingMessages;
     private ThreadAdapter threadAdapter;
     private QueueDispatcher loggingQueueDispatcher;
-  
-    
     private ConcurrentHashMap<String, Logger> loggersCache = new ConcurrentHashMap<String, Logger>();
 
 
@@ -23,7 +26,8 @@ public class LoggerFactoryImpl implements LoggerFactory {
         this.threadAdapter = threadAdapter;
         this.loggingQueueDispatcher = loggingQueueDispatcher;
     }
-
+    
+    @Override
     public Logger getLogger(String loggerFor)
     {
     		if(!loggersCache.contains(loggerFor)) {

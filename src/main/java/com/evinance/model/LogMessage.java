@@ -2,6 +2,11 @@ package com.evinance.model;
 
 import java.util.Date;
 
+/**
+ * Model class for Log Messages
+ * @author arjunkarnwal
+ *
+ */
 public class LogMessage {
 
 	public Date timestamp;

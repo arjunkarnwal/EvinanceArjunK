@@ -1,6 +1,9 @@
 package com.evinance.model;
 
+import java.util.concurrent.ExecutorService;
+import java.util.function.Function;
+
 public interface ThreadAdapter {
 	long getCurrentThreadId();
-	Thread createBackGroundThread(Runnable target);
+	ExecutorService createBackGroundThread(Runnable function);
 }
