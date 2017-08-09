@@ -18,8 +18,13 @@ import com.evinance.model.SimpleTextFileAppender;
 import com.evinance.model.ThreadAdapter;
 import com.evinance.model.ThreadAdapterImpl;
 
+/**
+ * Class to test End to End Flow
+ * @author arjunkarnwal
+ *
+ */
 public class EvinanceApp {
-
+	
 	public static void main(String[] args) {
 		LinkedBlockingQueue<LogMessage> pendingLogQueue = new LinkedBlockingQueue<LogMessage>();
 
