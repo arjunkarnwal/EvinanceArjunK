@@ -3,7 +3,6 @@ package com.evinance.assignment;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -14,10 +13,6 @@ import com.evinance.model.ThreadAdapter;
 import com.evinance.model.ThreadAdapterImpl;
 
 import org.junit.Assert;
-
-import static org.mockito.Mockito.inOrder;
-
-import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @RunWith(MockitoJUnitRunner.class)
