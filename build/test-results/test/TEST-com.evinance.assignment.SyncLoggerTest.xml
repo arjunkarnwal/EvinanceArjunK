@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.evinance.assignment.SyncLoggerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2017-08-05T14:16:55" hostname="Air-de-Arjun.local" time="2.89">
+<testsuite name="com.evinance.assignment.SyncLoggerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2017-08-09T01:43:23" hostname="Air-de-Arjun.local" time="2.896">
   <properties/>
-  <testcase name="log" classname="com.evinance.assignment.SyncLoggerTest" time="2.89"/>
+  <testcase name="log" classname="com.evinance.assignment.SyncLoggerTest" time="2.896"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
